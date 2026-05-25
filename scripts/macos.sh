@@ -73,9 +73,19 @@ for f in git gh lazygit \
 done
 
 # --- casks ---
-for c in visual-studio-code docker iterm2; do
+for c in visual-studio-code iterm2; do
     brew_cask "$c"
 done
+
+# --- AWS CLI v2 (official pkg) ---
+if have aws; then
+    skip "aws cli already installed"
+else
+    log "Installing AWS CLI v2 (pkg)"
+    curl -fsSL "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o /tmp/AWSCLIV2.pkg
+    sudo installer -pkg /tmp/AWSCLIV2.pkg -target /
+    rm -f /tmp/AWSCLIV2.pkg
+fi
 
 # --- Python ---
 if have uv; then

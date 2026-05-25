@@ -51,7 +51,7 @@ sudo apt-get update
 sudo apt-get -y full-upgrade
 
 apt_install \
-    build-essential curl git ca-certificates gnupg wget \
+    build-essential curl git ca-certificates gnupg wget unzip \
     gh neovim tmux direnv \
     ripgrep fd-find bat jq fzf zoxide
 
@@ -101,6 +101,17 @@ if have nvm; then
     nvm use --lts
 fi
 
+# AWS CLI v2 (official zip installer)
+if have aws; then
+    skip "aws cli already installed"
+else
+    log "Installing AWS CLI v2"
+    curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+    unzip -q /tmp/awscliv2.zip -d /tmp
+    sudo /tmp/aws/install --update
+    rm -rf /tmp/awscliv2.zip /tmp/aws
+fi
+
 # npm globals
 if have npm; then
     for p in @anthropic-ai/claude-code @openai/codex @google/gemini-cli \
@@ -120,5 +131,5 @@ Done. Add the following to your ~/.bashrc (or ~/.zshrc) if not present:
   eval "$(zoxide init bash)"
   eval "$(direnv hook bash)"
 
-Optional next steps live in linux.md (Docker, VS Code apt repo).
+Optional next steps live in linux.md (VS Code apt repo).
 EOF

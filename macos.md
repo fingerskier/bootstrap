@@ -35,7 +35,7 @@ brew install \
   ripgrep fd bat eza jq yq git-delta \
   neovim tmux \
   uv pnpm
-brew install --cask visual-studio-code docker iterm2
+brew install --cask visual-studio-code iterm2
 ```
 
 ## 3. Runtimes
@@ -92,12 +92,18 @@ Ctrl-T.
 
 ## 7. Editor setup
 
+Launch VS Code, sign in, let Settings Sync pull your extensions and
+config. The repo does not curate an extension list.
+
+## 8. AWS CLI
+
 ```sh
-# VS Code extensions, batch install:
-xargs -n 1 code --install-extension < scripts/vscode-extensions.txt
+curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o /tmp/AWSCLIV2.pkg
+sudo installer -pkg /tmp/AWSCLIV2.pkg -target /
+rm /tmp/AWSCLIV2.pkg
 ```
 
-## 8. Git baseline
+## 9. Git baseline
 
 ```sh
 git config --global init.defaultBranch main
@@ -107,9 +113,9 @@ git config --global core.editor "code --wait"
 
 Set `user.name` and `user.email` yourself.
 
-## 9. Smoke test
+## 10. Smoke test
 
 ```sh
 git --version && gh --version && node --version && python3 --version \
-  && code --version && nvim --version | head -n1
+  && code --version && nvim --version | head -n1 && aws --version
 ```

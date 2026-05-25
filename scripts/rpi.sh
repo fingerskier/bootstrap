@@ -50,7 +50,7 @@ log "Pi EEPROM update (safe to re-run)"
 sudo rpi-eeprom-update -a || true
 
 apt_install \
-    build-essential git gh curl ca-certificates gnupg wget \
+    build-essential git gh curl ca-certificates gnupg wget unzip \
     neovim tmux direnv \
     ripgrep fd-find bat jq fzf zoxide \
     python3-venv python3-pip \
@@ -97,12 +97,15 @@ if have nvm; then
     nvm use --lts
 fi
 
-# Docker via convenience script — official, easiest on Pi OS.
-if ! have docker; then
-    log "Installing Docker Engine"
-    curl -fsSL https://get.docker.com | sh
-    sudo usermod -aG docker "$USER"
-    echo "  (log out + back in for docker group to take effect)"
+# AWS CLI v2 (aarch64 zip installer)
+if have aws; then
+    skip "aws cli already installed"
+else
+    log "Installing AWS CLI v2 (aarch64)"
+    curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o /tmp/awscliv2.zip
+    unzip -q /tmp/awscliv2.zip -d /tmp
+    sudo /tmp/aws/install --update
+    rm -rf /tmp/awscliv2.zip /tmp/aws
 fi
 
 # AI dev CLIs once npm exists.
@@ -131,6 +134,5 @@ Done. Add the following to your ~/.bashrc if not present:
 
 Pi-specific reminders:
   - Pi 5 uses lgpio / gpiozero, NOT RPi.GPIO.
-  - Re-login required for the docker group.
   - See rpi.md §8 for SSH hardening (key-only auth).
 EOF

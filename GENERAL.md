@@ -85,17 +85,15 @@ Cross-OS principles and the tool index. Per-OS install steps live in
 
 | Tool        | Why                                          |
 |-------------|----------------------------------------------|
-| `xlii`      | Roman numeral CLI / lib                      |
-| `wrangler`  | Cloudflare Workers deploy + dev              |
-| `underrow`  | Markdown knowledgebase / todo CLI            |
+| `xlii`      | Agent memory persistence for non-VC'd stuff  |
+| `wrangler`  | Windows terminal manager                     |
+| `underrow`  | Document indexer                             |
 
-### Containers / cloud
+### Cloud
 
-| Tool             | Why                              |
-|------------------|----------------------------------|
-| Docker Desktop   | Local containers (Win/macOS)     |
-| Docker Engine    | Linux/Pi native                  |
-| `kubectl`        | If you touch a cluster           |
+| Tool   | Why                                              |
+|--------|--------------------------------------------------|
+| `aws`  | AWS CLI v2 — official installer on all OSes      |
 
 ### Optional power-ups
 

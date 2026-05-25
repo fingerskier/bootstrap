@@ -36,7 +36,7 @@ curl -fsSL https://raw.githubusercontent.com/fingerskier/bootstrap/main/scripts/
 
 ```sh
 sudo apt -y install \
-  build-essential git gh curl ca-certificates \
+  build-essential git gh curl ca-certificates unzip \
   neovim tmux direnv \
   ripgrep fd-find bat jq fzf zoxide \
   python3-venv python3-pip
@@ -88,14 +88,14 @@ supported on Pi 5 — the chip changed.
 uv tool install --python 3.12 gpiozero lgpio
 ```
 
-## 6. Docker (optional)
+## 6. AWS CLI
 
 ```sh
-curl -fsSL https://get.docker.com | sh
-sudo usermod -aG docker "$USER"   # log out / back in
+curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o /tmp/awscliv2.zip
+unzip -q /tmp/awscliv2.zip -d /tmp
+sudo /tmp/aws/install --update
+rm -rf /tmp/awscliv2.zip /tmp/aws
 ```
-
-The convenience script is the recommended path for Pi OS.
 
 ## 7. AI dev CLIs
 
@@ -135,6 +135,6 @@ eval "$(direnv hook bash)"
 
 ```sh
 git --version && gh --version && node --version && python3 --version \
-  && nvim --version | head -n1
+  && nvim --version | head -n1 && aws --version
 uname -m   # should be aarch64
 ```

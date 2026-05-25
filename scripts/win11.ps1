@@ -1,4 +1,4 @@
-# win11.ps1 — idempotent dev-box bootstrap for Windows 11.
+# win11.ps1 - idempotent dev-box bootstrap for Windows 11.
 #
 # Usage (from elevated PowerShell):
 #   irm https://raw.githubusercontent.com/fingerskier/bootstrap/main/scripts/win11.ps1 | iex
@@ -58,8 +58,7 @@ $wingetPkgs = @(
     'ajeetdsouza.zoxide',
     'dandavison.delta',
     'astral-sh.uv',
-    'CoreyButler.NVMforWindows',
-    'Docker.DockerDesktop'
+    'CoreyButler.NVMforWindows'
 )
 foreach ($id in $wingetPkgs) { Install-WingetPkg -Id $id }
 
@@ -80,6 +79,20 @@ if (Get-Command nvm -ErrorAction SilentlyContinue) {
     nvm use lts
 }
 
+# --- AWS CLI v2 (official MSI) ---
+if (Get-Command aws -ErrorAction SilentlyContinue) {
+    Write-Host ">> aws cli already installed, skipping." -ForegroundColor DarkGray
+} else {
+    Write-Host ">> Installing AWS CLI v2 (MSI)" -ForegroundColor Cyan
+    $msi = Join-Path $env:TEMP 'AWSCLIV2.msi'
+    Invoke-WebRequest -Uri 'https://awscli.amazonaws.com/AWSCLIV2.msi' -OutFile $msi
+    Start-Process msiexec.exe -Wait -ArgumentList "/i `"$msi`" /qn"
+    Remove-Item $msi -ErrorAction SilentlyContinue
+    # Refresh PATH so subsequent `aws` calls in this session resolve.
+    $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' +
+                [Environment]::GetEnvironmentVariable('Path','User')
+}
+
 # --- npm globals ---
 if (Get-Command npm -ErrorAction SilentlyContinue) {
     $npmPkgs = @(
@@ -92,7 +105,7 @@ if (Get-Command npm -ErrorAction SilentlyContinue) {
     )
     foreach ($p in $npmPkgs) { Install-NpmGlobal -Pkg $p }
 } else {
-    Write-Warning "npm not on PATH yet — reopen terminal and re-run for the npm portion."
+    Write-Warning "npm not on PATH yet - reopen terminal and re-run for the npm portion."
 }
 
-Write-Host "`nDone. Open a new terminal and run scripts\smoke.ps1 (or follow win11.md §10)." -ForegroundColor Green
+Write-Host "`nDone. Open a new terminal and run scripts\smoke.ps1 (or follow win11.md section 11)." -ForegroundColor Green

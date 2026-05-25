@@ -25,8 +25,8 @@ Store, then reopen the terminal.
 irm https://raw.githubusercontent.com/fingerskier/bootstrap/main/scripts/win11.ps1 | iex
 ```
 
-That script does everything in §2–§4 idempotently. Read it before
-running.
+That script does everything in §2–§4 and §10 idempotently. Read it
+before running.
 
 ## 2. Core packages (winget)
 
@@ -47,7 +47,6 @@ winget install --id jqlang.jq -e
 winget install --id MikeFarah.yq -e
 winget install --id ajeetdsouza.zoxide -e
 winget install --id dandavison.delta -e
-winget install --id Docker.DockerDesktop -e
 ```
 
 ## 3. Runtimes
@@ -105,12 +104,8 @@ wsl --install -d Ubuntu
 
 ## 7. Editor setup
 
-- **VS Code** — sign in to settings sync, install your extension set.
-  A starter list is in [`scripts/vscode-extensions.txt`](./scripts/vscode-extensions.txt);
-  install with:
-  ```pwsh
-  Get-Content scripts/vscode-extensions.txt | ForEach-Object { code --install-extension $_ }
-  ```
+- **VS Code** — launch it, sign in, let Settings Sync pull your
+  extensions and config. The repo does not curate an extension list.
 - **Neovim** — drop a minimal `init.lua` into `$env:LOCALAPPDATA\nvim\`.
 
 ## 8. Shell prompt
@@ -133,7 +128,18 @@ git config --global core.editor "code --wait"
 
 Set `user.name` and `user.email` yourself — not in this repo.
 
-## 10. Smoke test
+## 10. AWS CLI
+
+Install the official AWS CLI v2 MSI:
+
+```pwsh
+$msi = "$env:TEMP\AWSCLIV2.msi"
+Invoke-WebRequest -Uri https://awscli.amazonaws.com/AWSCLIV2.msi -OutFile $msi
+Start-Process msiexec.exe -Wait -ArgumentList "/i $msi /qn"
+Remove-Item $msi
+```
+
+## 11. Smoke test
 
 ```pwsh
 git --version
@@ -142,7 +148,8 @@ node --version
 python --version
 code --version
 nvim --version | Select-Object -First 1
+aws --version
 ```
 
-All five should print versions. If any fail, restart the terminal so
+All six should print versions. If any fail, restart the terminal so
 PATH refreshes and try again.

@@ -10,7 +10,7 @@ For Raspberry Pi OS specifically, see [`rpi.md`](./rpi.md).
 
 ```sh
 sudo apt update && sudo apt -y full-upgrade
-sudo apt -y install build-essential curl git ca-certificates gnupg
+sudo apt -y install build-essential curl git ca-certificates gnupg unzip
 ```
 
 ## 1. One-shot bootstrap (optional)
@@ -93,24 +93,7 @@ npm i -g @anthropic-ai/claude-code @openai/codex @google/gemini-cli
 npm i -g xlii wrangler underrow
 ```
 
-## 6. Docker
-
-```sh
-# Official Docker Engine — apt's docker.io is older.
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/debian/gpg \
-  | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-  https://download.docker.com/linux/debian $(. /etc/os-release && echo $VERSION_CODENAME) stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list
-sudo apt update
-sudo apt -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-sudo usermod -aG docker "$USER"   # log out / back in
-```
-
-(For Ubuntu replace `linux/debian` with `linux/ubuntu`.)
-
-## 7. VS Code
+## 6. VS Code
 
 ```sh
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc \
@@ -119,7 +102,18 @@ echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/packages.microso
   https://packages.microsoft.com/repos/code stable main" \
   | sudo tee /etc/apt/sources.list.d/vscode.list
 sudo apt update && sudo apt -y install code
-xargs -n 1 code --install-extension < scripts/vscode-extensions.txt
+```
+
+Then launch `code`, sign in, and let Settings Sync pull your extensions
+and config. The repo does not curate an extension list.
+
+## 7. AWS CLI
+
+```sh
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+unzip -q /tmp/awscliv2.zip -d /tmp
+sudo /tmp/aws/install --update
+rm -rf /tmp/awscliv2.zip /tmp/aws
 ```
 
 ## 8. Shell prompt
@@ -146,5 +140,5 @@ Set `user.name` and `user.email` yourself.
 
 ```sh
 git --version && gh --version && node --version && python3 --version \
-  && code --version && nvim --version | head -n1
+  && code --version && nvim --version | head -n1 && aws --version
 ```
